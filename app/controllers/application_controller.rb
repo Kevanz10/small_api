@@ -32,7 +32,6 @@ class ApplicationController < ActionController::API
   		self.headers['X-Prev-Page'] = 1
   	end
   	self.headers['X-Per-Page'] = 10
-  	
 	end
 end
 

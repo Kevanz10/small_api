@@ -5,9 +5,11 @@ module Api::V1
 		before_action :set_heroe, only: [:show, :update, :destroy]
 	  # GET /heroes
 	  def index
-	    @heroes = Heroe.all.to_json(except: ['created_at', 'updated_at', 'universe_id'], 
-	    														:include => {:universe => {except: ['created_at', 'updated_at']}})
-	    render json: @heroes
+	    @heroes = Heroe.all.paginate(page: params[:page], per_page:10)
+	    page = params[:page] if params[:page]
+	    render_unauthorized(@heroes,page)
+	    render json: @heroes.to_json(except: ['created_at', 'updated_at', 'universe_id', 'abilities'], :include => {:universe => {except: ['created_at', 'updated_at']}})
+	    
 	  end
 
 	  # GET /heroes/1
@@ -20,7 +22,7 @@ module Api::V1
 	  def update
     	@heroe.update(heroes_params)
     	if @heroe.update_attributes(heroes_params)
-				render json: @heroe.to_json(except: ['created_at', 'updated_at', 'universe_id'], 
+				render json: @heroe.to_json(except: ['created_at', 'updated_at', 'universe_id', 'abilities'], 
 	    														:include => {:universe => {except: ['created_at', 'updated_at']}})
 			else
 				render json: @heroe.errors
@@ -31,7 +33,7 @@ module Api::V1
 		def create
 			@heroe = Heroe.new(heroes_params)
 			if @heroe.save
-				render json: @heroe.to_json(except: ['created_at', 'updated_at', 'universe_id'], 
+				render json: @heroe.to_json(except: ['created_at', 'updated_at', 'universe_id', 'abilities'], 
 	    														include: {universe: {except: ['created_at', 'updated_at']}})
 			else
 				render json: @heroe.errors
