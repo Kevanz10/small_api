@@ -1,3 +1,4 @@
 class Heroe < ApplicationRecord
-	belongs_to :universe
+	
+	validates :name, :real_name, :species, uniqueness: true
 end

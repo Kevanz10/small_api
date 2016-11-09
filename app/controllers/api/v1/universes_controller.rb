@@ -4,17 +4,11 @@ module Api::V1
 
 		before_action :set_universe, only: [:show, :update, :destroy]
 
-
-		set_pagination_headers :widgets, only: [:index]
-
-	  def index
-	    @widgets = Widget.all.paginate(params).order("created_at desc")
-	    respond_with @widgets
-	  end
-	  
 	  # GET /Universes
 	  def index
-	    @universes = Universe.all
+	    @universes = Universe.all.paginate(page: params[:page], per_page:10)
+	    page = params[:page] if params[:page]
+	    render_unauthorized(@universes,page)
 	    render json: @universes.to_json
 	  end
 
