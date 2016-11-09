@@ -1,7 +1,7 @@
 class ApplicationController < ActionController::API
 	include ActionController::HttpAuthentication::Basic::ControllerMethods
-	protected
 
+	protected
 	#method for the response at header
 	def render_unauthorized(universe,page)
   	self.headers['X-Total'] = "#{universe.count}"
